@@ -19,6 +19,7 @@ export type Parameters = {
   hideProfile?: string;
   hideActivity?: string;
   hideSpotify?: string;
+  hideAppleMusic?: string;
   hideClan?: string;
   hideDecoration?: string;
   ignoreAppId?: string;
@@ -75,6 +76,7 @@ async function renderCard(body: LanyardTypes.Root, params: Parameters): Promise<
   let hideProfile = parseBool(params.hideProfile);
   let hideActivity = params.hideActivity ?? "false";
   let hideSpotify = parseBool(params.hideSpotify);
+  let hideAppleMusic = parseBool(params.hideAppleMusic);
   let hideClan = parseBool(params.hideClan);
   let hideDecoration = parseBool(params.hideDecoration);
   let ignoreAppId = parseAppId(params.ignoreAppId);
@@ -150,10 +152,14 @@ async function renderCard(body: LanyardTypes.Root, params: Parameters): Promise<
   if (data.activities[0] && data.activities[0].type === 4) userStatus = data.activities[0];
 
   const activities = data.activities
-    // Filter only type 0
-    .filter(activity => activity.type === 0)
-    // Filter ignored app ID
-    .filter(activity => !ignoreAppId.includes(activity.application_id ?? ""));
+    .filter(activity => {
+      // Filter out Apple Music if hideAppleMusic is true
+      if (hideAppleMusic && activity.name === "Apple Music") {
+        return false;
+      }
+      // Filter only type 0 and respect ignored app IDs
+      return activity.type === 0 && !ignoreAppId.includes(activity.application_id ?? "");
+    });
 
   // Take the highest one
   activity = Array.isArray(activities) ? activities[0] : activities;
@@ -163,7 +169,7 @@ async function renderCard(body: LanyardTypes.Root, params: Parameters): Promise<
     if (hideProfile) return "130";
     if (hideActivity === "true") return "91";
     if (hideActivity === "whenNotUsed" && !activity && !data.listening_to_spotify) return "91";
-    if (hideSpotify && data.listening_to_spotify) return "210";
+    if ((hideSpotify && data.listening_to_spotify) || (hideAppleMusic && activity?.name === "Apple Music")) return "210";
     return "210";
   };
 
@@ -172,7 +178,7 @@ async function renderCard(body: LanyardTypes.Root, params: Parameters): Promise<
     if (hideProfile) return "120";
     if (hideActivity === "true") return "81";
     if (hideActivity === "whenNotUsed" && !activity && !data.listening_to_spotify) return "81";
-    if (hideSpotify && data.listening_to_spotify) return "200";
+    if ((hideSpotify && data.listening_to_spotify) || (hideAppleMusic && activity?.name === "Apple Music")) return "200";
     return "200";
   };
 

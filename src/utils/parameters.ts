@@ -11,6 +11,7 @@ export type Parameters = {
   hideProfile?: string;
   hideActivity?: string;
   hideSpotify?: string;
+  hideAppleMusic?: string;
   hideClan?: string;
   hideDecoration?: string;
   ignoreAppId?: string;
@@ -22,36 +23,36 @@ export type Parameters = {
 export type IParameterInfo = Array<
   { deprecated?: boolean } & (
     | {
-        parameter: string;
-        type: "boolean";
-        title: string;
-        description?: string;
-        options?: {
-          defaultBool?: boolean;
-        };
-      }
+      parameter: string;
+      type: "boolean";
+      title: string;
+      description?: string;
+      options?: {
+        defaultBool?: boolean;
+      };
+    }
     | {
-        parameter: string;
-        type: "string";
-        title: string;
-        description?: string;
-        options?: {
-          placeholder?: string;
-          omit?: string[];
-        };
-      }
+      parameter: string;
+      type: "string";
+      title: string;
+      description?: string;
+      options?: {
+        placeholder?: string;
+        omit?: string[];
+      };
+    }
     | {
-        parameter: string;
-        type: "list";
-        title: string;
-        description?: string;
-        options: {
-          list: Array<{
-            name: string;
-            value: string;
-          }>;
-        };
-      }
+      parameter: string;
+      type: "list";
+      title: string;
+      description?: string;
+      options: {
+        list: Array<{
+          name: string;
+          value: string;
+        }>;
+      };
+    }
   )
 >;
 
@@ -173,6 +174,12 @@ export const PARAMETER_INFO: IParameterInfo = [
     type: "boolean",
     title: "Hide Spotify",
     description: "Hides your Spotify activity only.",
+  },
+  {
+    parameter: "hideAppleMusic",
+    type: "boolean",
+    title: "Hide Apple Music",
+    description: "Hides your Apple Music activity only.",
   },
   {
     parameter: "ignoreAppId",
