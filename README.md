@@ -1,3 +1,7 @@
+### ___Hide Apple Music___
+
+If you don't want people seeing your Apple Music activity, append the query param `hideAppleMusic=true` to the end of the URL. Apple Music activity is shown by default.
+
 <!-- markdownlint-disable -->
 # lanyard-profile-readme
 
